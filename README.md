@@ -3,6 +3,8 @@
 ## 项目简介
 
 医院管理系统(HIMS)是一个基于 Spring Boot 和 Vue 3 的全栈应用程序，旨在帮助医院管理预约挂号、医生排班、患者信息等功能。系统采用前后端分离架构，前端使用 Vue 3 + Element Plus 构建用户界面，后端使用 Spring Boot 提供 API 服务。
+![image](https://github.com/user-attachments/assets/d146722d-9705-4064-b0f7-1a6a5cc91e46)
+
 
 ## 技术栈
 
