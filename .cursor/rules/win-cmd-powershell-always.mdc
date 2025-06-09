@@ -1,0 +1,175 @@
+---
+description: 当需要创建规则,更新规则或从用户那里学习应该为新规则使用
+globs: 
+alwaysApply: false
+---
+---
+description: 在Windows系统中使用cmd或PowerShell执行命令时，使用分号作为命令分隔符而非&&，创建文件夹时逐个创建而非批量创建，确保命令操作符合Windows命令行最佳实践。
+globs: 
+alwaysApply: true
+priority: 1000
+---
+
+# Windows命令行规范
+
+## 使用场景
+- 在Windows 11系统中使用cmd或PowerShell执行命令
+- 需要执行多个连续命令
+- 创建目录结构
+- 批处理或脚本编写
+- 系统管理和自动化任务
+- **生成任何Windows命令行命令时**
+
+## 关键规则
+- **所有生成的命令必须是Windows兼容的，不使用Linux/Unix命令格式**
+- 使用分号(;)分隔多个命令，不使用&&
+- 创建文件夹时一个一个创建，不使用嵌套路径
+- **不要在PowerShell中使用-p或{braces}语法创建多级目录**
+- 使用绝对路径时，路径分隔符使用反斜杠(\)
+- PowerShell中优先使用cmdlet而非别名
+- 命令执行前进行权限检查
+- 所有脚本都添加适当的错误处理
+
+## 命令分隔符规范
+- 使用分号(;)分隔命令，不使用&&
+- 每个命令应该能够独立执行完成
+- 长命令序列考虑使用脚本文件而非一行命令
+- 对于依赖前一命令成功的情况，在PowerShell中使用try/catch而非链式操作
+
+## 文件夹创建规范
+- 一次只创建一个目录，不使用嵌套路径
+- **PowerShell中不支持mkdir -p参数（这是Linux/Unix命令）**
+- **PowerShell中不支持{braces}展开语法创建多个目录**
+- **使用New-Item -ItemType Directory -Path "path\to\dir" -Force 创建多级目录**
+- 创建子目录前确保父目录已存在
+- 使用条件检查确认目录是否已存在
+- 创建目录前检查权限
+- 目录名中避免使用特殊字符
+
+## 文件操作规范
+- 文件复制：使用copy(cmd)或Copy-Item(PowerShell)，不使用简写cp
+- 文件移动：使用move(cmd)或Move-Item(PowerShell)，不使用简写mv
+- 文件删除：使用del(cmd)或Remove-Item(PowerShell)，不使用简写rm
+- 操作前使用if exist(cmd)或Test-Path(PowerShell)进行检查
+- 对重要文件操作前先创建备份
+- 批量文件操作使用通配符时格外小心
+- 文件路径中包含空格时，使用双引号括起来
+
+## 变量使用规范
+- 变量引用：在cmd中使用%var%，在PowerShell中使用$var
+- 变量赋值：在cmd中使用set var=value，在PowerShell中使用$var = value
+- 在PowerShell中使用强类型变量([string]$var)提高代码可靠性
+- 避免使用系统保留变量名
+- 使用有意义的变量名
+- PowerShell中使用$env:变量名访问环境变量
+
+## 错误处理规范
+- CMD批处理中使用errorlevel检查命令执行状态
+- PowerShell中使用try/catch进行异常处理
+- 使用$?变量(PowerShell)检查上一命令的执行状态
+- 出错时提供有意义的错误信息
+- 脚本开头设置错误处理级别：Set-StrictMode -Version Latest
+
+## 重定向与管道规范
+- 输出重定向使用 > (覆盖)或 >> (追加)
+- 错误重定向在CMD中使用2>，在PowerShell中使用2> 或 -ErrorAction
+- PowerShell中优先使用对象管道(|)而非文本管道
+- 避免不必要的多重管道操作，优先使用单个命令的参数
+- 管道中间结果过大时考虑使用临时变量存储
+
+## 权限与安全规范
+- 需要管理员权限的脚本，在开头明确检查并提示
+- PowerShell脚本执行前检查执行策略(Get-ExecutionPolicy)
+- 敏感信息不应硬编码在脚本中，使用参数传递
+- 使用凭据对象而非明文密码：Get-Credential
+- 文件操作时注意保持原有权限(ACL)
+
+## 循环与条件规范
+- CMD中使用for和if，PowerShell中使用foreach和if
+- 避免无限循环，添加明确的退出条件
+- 大型循环中添加进度显示：Write-Progress
+- 循环中处理错误，避免因单个项目失败导致整个循环失败
+- 条件判断中使用-eq、-ne等操作符而非==、!=
+
+## 脚本组织规范
+- 脚本顶部添加注释说明功能、参数和用法
+- 使用函数(PowerShell)或标签(CMD)组织代码
+- 相关功能集中放置，逻辑分明
+- 使用参数块(PowerShell)规范化参数输入
+- 长脚本使用#region和#endregion分隔区域
+
+## 示例
+<example>
+# 使用分号分隔命令
+cd C:\Users\username\Documents; mkdir Project; cd Project
+
+# 正确的文件夹创建方式
+mkdir ParentFolder
+mkdir ParentFolder\ChildFolder
+mkdir ParentFolder\ChildFolder\SubFolder
+
+# PowerShell中创建多级目录的正确方式
+New-Item -ItemType Directory -Path "backend\src\main\java\com\hims\config" -Force
+New-Item -ItemType Directory -Path "backend\src\main\java\com\hims\controller" -Force
+New-Item -ItemType Directory -Path "backend\src\main\java\com\hims\entity" -Force
+New-Item -ItemType Directory -Path "backend\src\main\java\com\hims\mapper" -Force
+New-Item -ItemType Directory -Path "backend\src\main\java\com\hims\service\impl" -Force
+New-Item -ItemType Directory -Path "backend\src\main\java\com\hims\utils" -Force
+
+# 批量创建多个目录的脚本方式
+$dirs = @(
+    "backend\src\main\java\com\hims\config",
+    "backend\src\main\java\com\hims\controller",
+    "backend\src\main\java\com\hims\entity",
+    "backend\src\main\java\com\hims\mapper",
+    "backend\src\main\java\com\hims\service\impl",
+    "backend\src\main\java\com\hims\utils"
+)
+foreach ($dir in $dirs) {
+    New-Item -ItemType Directory -Path $dir -Force
+}
+
+# PowerShell中使用cmdlet
+Get-ChildItem -Path C:\Users\username -Recurse -Filter *.txt
+
+# PowerShell中的错误处理
+try {
+    Remove-Item "C:\temp\file.txt" -ErrorAction Stop
+} catch {
+    Write-Host "无法删除文件: $_"
+}
+
+# CMD中的错误处理
+del C:\temp\file.txt
+if %errorlevel% neq 0 echo 删除文件失败，错误码: %errorlevel%
+
+# 权限检查
+PowerShell -Command "& {if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {Write-Host '需要管理员权限'}}"
+</example>
+
+<example type="invalid">
+# 使用&&分隔命令(错误)
+cd C:\Users\username\Documents && mkdir Project && cd Project
+
+# 嵌套创建文件夹(错误)
+mkdir ParentFolder\ChildFolder\SubFolder
+
+# 使用-p参数创建多级目录(错误，这是Linux命令)
+mkdir -p backend/src/main/java/com/hims/config
+
+# 使用花括号展开语法(错误，PowerShell不支持)
+mkdir -p backend/src/main/java/com/hims/{config,controller,entity,mapper,service/impl,utils}
+
+# PowerShell中使用别名(不推荐)
+ls -r C:\Users\username | ? {$_.Name -like "*.txt"}
+
+# 未处理错误的命令(错误)
+Remove-Item C:\temp\*.*
+
+# 硬编码敏感信息(错误)
+$password = "SuperSecretPassword"
+net use Z: \\server\share $password /user:domain\username
+
+# 使用不安全的通配符删除(错误)
+del C:\*.*
+</example>
