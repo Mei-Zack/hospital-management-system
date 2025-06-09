@@ -79,7 +79,7 @@ npm run dev
 - 管理员账号:
 
   - 用户名: admin
-  - 密码: admin
+  - 密码: admin123
 
 
 
