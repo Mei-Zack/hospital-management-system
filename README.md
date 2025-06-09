@@ -79,9 +79,7 @@ npm run dev
   - 用户名: admin
   - 密码: admin
 
-- 医生账号:
-  - 用户名: mei
-  - 密码: 1
+
 
 ## 项目结构
 
