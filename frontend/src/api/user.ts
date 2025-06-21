@@ -16,7 +16,7 @@ interface PageResult<T> {
 }
 
 export function getUserPage(params: PageParams) {
-  return request.get<any, Result<PageResult<User>>>('/api/users/page', { params })
+  return request.get<any, Result<PageResult<User>>>('/api/users/page', params)
 }
 
 export function updatePassword(data: {

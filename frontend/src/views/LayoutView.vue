@@ -25,6 +25,28 @@
           <el-icon><Calendar /></el-icon>
           <span>预约管理</span>
         </el-menu-item>
+        <el-sub-menu index="/medicine">
+          <template #title>
+            <el-icon><FirstAidKit /></el-icon>
+            <span>药品管理</span>
+          </template>
+          <el-menu-item index="/medicines">
+            <el-icon><List /></el-icon>
+            <span>药品列表</span>
+          </el-menu-item>
+          <el-menu-item index="/medicine-inbounds">
+            <el-icon><Download /></el-icon>
+            <span>药品入库</span>
+          </el-menu-item>
+          <el-menu-item index="/medicine-sales">
+            <el-icon><Sell /></el-icon>
+            <span>药品销售</span>
+          </el-menu-item>
+          <el-menu-item index="/medicine-statistics">
+            <el-icon><DataAnalysis /></el-icon>
+            <span>药品统计</span>
+          </el-menu-item>
+        </el-sub-menu>
       </el-menu>
     </el-aside>
     <el-container>
@@ -76,7 +98,18 @@ import { ref, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { updatePassword } from '@/api/user'
-import { House, User, Avatar, Calendar, CaretBottom } from '@element-plus/icons-vue'
+import { 
+  House, 
+  User, 
+  Avatar, 
+  Calendar, 
+  CaretBottom, 
+  FirstAidKit, 
+  List, 
+  Download, 
+  Sell, 
+  DataAnalysis 
+} from '@element-plus/icons-vue'
 import type { FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
 

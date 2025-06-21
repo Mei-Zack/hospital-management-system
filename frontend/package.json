@@ -5,20 +5,40 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "dev:win": "set NODE_ENV=development && vite",
+    "build:win": "set NODE_ENV=production && vite build",
+    "clean": "rimraf dist node_modules/.vite"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
     "axios": "^1.4.0",
     "echarts": "^5.6.0",
     "element-plus": "^2.3.9",
     "pinia": "^2.1.6",
     "vue": "^3.3.4",
-    "vue-router": "^4.2.4"
+    "vue-router": "^4.2.4",
+    "core-js": "^3.32.0",
+    "nprogress": "^0.2.0"
   },
   "devDependencies": {
     "@types/node": "^20.5.0",
+    "@types/nprogress": "^0.2.0",
     "@vitejs/plugin-vue": "^4.2.3",
     "typescript": "^5.1.6",
-    "vite": "^4.4.9"
+    "vite": "^4.4.9",
+    "rimraf": "^5.0.1",
+    "sass": "^1.66.1",
+    "sass-loader": "^13.3.2"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ],
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
   }
 }

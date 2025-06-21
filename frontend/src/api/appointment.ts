@@ -17,7 +17,7 @@ interface PageResult<T> {
 }
 
 export function getAppointmentPage(params: PageParams) {
-  return request.get<any, Result<PageResult<Appointment>>>('/api/appointments/page', { params })
+  return request.get<any, Result<PageResult<Appointment>>>('/api/appointments/page', params)
 }
 
 export function createAppointment(data: Appointment) {

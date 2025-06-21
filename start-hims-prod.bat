@@ -1,6 +1,6 @@
 @echo off
 chcp 65001 >nul
-echo 正在启动医院管理系统...
+echo 正在启动医院管理系统(生产环境)...
 
 rem 设置工作目录
 set "projectRoot=%~dp0"
@@ -82,14 +82,11 @@ if not exist "%frontendDir%\package.json" (
     goto :error
 )
 
-rem 检查前端依赖
-if not exist "%frontendDir%\node_modules" (
-    echo 前端依赖未安装，正在安装依赖...
-    cd /d "%frontendDir%" && npm install
-    if %ERRORLEVEL% NEQ 0 (
-        echo [错误] 安装前端依赖失败
-        goto :error
-    )
+echo 正在构建前端生产版本...
+cd /d "%frontendDir%" && npm install && npm run build
+if %ERRORLEVEL% NEQ 0 (
+    echo [错误] 构建前端生产版本失败
+    goto :error
 )
 
 rem 创建临时的application-local.yml文件
@@ -106,28 +103,20 @@ echo   port: %BACKEND_PORT%
 
 echo 环境检查完成，开始启动服务...
 
-echo 正在启动后端服务(端口: %BACKEND_PORT%)...
-start cmd /k "cd /d "%backendDir%" && call .\mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=local"
+echo 正在启动后端服务(生产环境，端口: %BACKEND_PORT%)...
+start cmd /k "cd /d "%backendDir%" && call .\mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=prod,local"
 
 echo 等待后端服务启动...
 echo 正在等待后端服务启动，请稍候...
 timeout /t %STARTUP_DELAY_BACKEND% /nobreak >nul
 
-echo 正在启动前端服务(端口: %FRONTEND_PORT%)...
-start cmd /k "cd /d "%frontendDir%" && set PORT=%FRONTEND_PORT% && npm run dev"
-
-echo 等待前端服务启动...
-timeout /t %STARTUP_DELAY_FRONTEND% /nobreak >nul
-
-echo 正在打开浏览器...
-start http://localhost:%FRONTEND_PORT%
+echo 正在启动前端服务(生产环境预览，端口: %FRONTEND_PORT%)...
+cd /d "%frontendDir%" && npx serve -s dist -l %FRONTEND_PORT%
 
 echo.
-echo 医院管理系统已启动
+echo 医院管理系统(生产环境)已启动
 echo 后端服务运行在 http://localhost:%BACKEND_PORT%
 echo 前端服务运行在 http://localhost:%FRONTEND_PORT%
-echo.
-echo 服务已在独立窗口中启动，关闭相应窗口可停止服务
 echo.
 echo 如遇到问题，请检查:
 echo 1. MySQL服务是否正常运行
@@ -143,5 +132,4 @@ echo 启动失败，请解决上述问题后重试
 pause
 exit /b 1
 
-:end
-pause 
+:end 

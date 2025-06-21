@@ -1,0 +1,1 @@
+import{r}from"./request-51dbdc85.js";function u(s){return r.get("/api/users/page",{params:s})}function e(s){return r.put("/api/users/password",s)}function p(s,t){return r.put(`/api/users/${s}/status`,null,{params:{status:t}})}export{p as a,u as g,e as u};

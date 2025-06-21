@@ -16,7 +16,7 @@ interface PageResult<T> {
 }
 
 export function getDoctors(params: PageParams) {
-  return request.get<any, Result<PageResult<Doctor>>>('/api/doctors/page', { params })
+  return request.get<any, Result<PageResult<Doctor>>>('/api/doctors/page', params)
 }
 
 export function getDoctorById(id: number) {

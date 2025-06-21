@@ -1,0 +1,1 @@
+import{r as o}from"./request-51dbdc85.js";function a(t){return o.get("/api/doctors/page",{params:t})}function s(t){return o.post("/api/doctors",t)}function c(t){return o.put(`/api/doctors/${t.id}`,t)}function e(t,r){return o.put(`/api/doctors/${t}/status`,null,{params:{status:r}})}export{e as a,s as c,a as g,c as u};
